@@ -10,7 +10,7 @@ const testNetworkRoot = path.resolve(require('os').homedir(), 'fabric-samples/te
 async function addToWallet() {
 
     try {
-        const wallet = await Wallets.newFileSystemWallet('./wallet');
+        const wallet = await Wallets.newFileSystemWallet('/home/ubuntu/wallet');
         
         const predefinedOrgs = [
             {
