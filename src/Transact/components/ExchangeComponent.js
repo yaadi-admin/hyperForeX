@@ -1,5 +1,4 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -8,50 +7,104 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import StarIcon from '@mui/icons-material/StarBorder';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import Container from '@mui/material/Container';
-import { TextField } from '@mui/material';
+import { TextField, MenuItem, Select } from '@mui/material';
+
+const currencies = [
+  { label: 'USDT', value: 'USDT' },
+  { label: 'CAD', value: 'CAD' },
+];
 
 export default function ExchangeComponent({ isVisible, setIsVisible }) {
+  const [usdtValue, setUsdtValue] = React.useState('');
+  const [usdtCurrency, setUsdtCurrency] = React.useState('USDT');
+  const [cadValue, setCadValue] = React.useState('');
+  const [cadCurrency, setCadCurrency] = React.useState('CAD');
 
-    return (
-        <div>
-            <CardActions>
-                <Button onClick={() => {
-                    setIsVisible(0);
-                }
-                }>
-                    Cancel
-                </Button>
-            </CardActions>
+  const handleSwap = () => {
+    setUsdtValue(cadValue);
+    setCadValue(usdtValue);
+    setUsdtCurrency(cadCurrency);
+    setCadCurrency(usdtCurrency);
+  };
 
-            <Box
-                sx={{
-                    // display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'baseline',
-                    mb: 2,
-                }}
-            >
-                <TextField id="standard-basic" label="Value USDT" variant="standard" />
-                <Typography style={{ marginTop: '2.5%' }} component="h4" variant="h7" color="text.primary">
-                    ...
-                </Typography>
-                <TextField id="standard-basic" label="Value CAD" variant="standard" />
-            </Box>
+  return (
+    <Card sx={{ maxWidth: 500, marginBottom: 2 }}>
+      <CardActions>
+        <Button onClick={() => setIsVisible(0)}>Cancel</Button>
+      </CardActions>
 
-            <CardActions>
-                <Button fullWidth variant={'outlined'}>
-                    Send
-                </Button>
-            </CardActions>
-        </div>
-    );
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          mb: 2,
+          padding: '0 20px',
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+          <TextField
+            id="standard-basic-top"
+            label="Value"
+            variant="standard"
+            value={usdtValue}
+            onChange={(e) => setUsdtValue(e.target.value)}
+          />
+          <Select
+            value={usdtCurrency}
+            onChange={(e) => setUsdtCurrency(e.target.value)}
+          >
+            {currencies.map((currency) => (
+              <MenuItem key={currency.value} value={currency.value}>
+                {currency.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </Box>
+        <Button sx={{ alignSelf: 'center', my: 1 }} onClick={handleSwap}>
+          <SwapHorizIcon />
+        </Button>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+          <TextField
+            id="standard-basic-bottom"
+            label="Value"
+            variant="standard"
+            value={cadValue}
+            onChange={(e) => setCadValue(e.target.value)}
+          />
+          <Select
+            value={cadCurrency}
+            onChange={(e) => setCadCurrency(e.target.value)}
+          >
+            {currencies.map((currency) => (
+              <MenuItem key={currency.value} value={currency.value}>
+                {currency.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </Box>
+        <Typography
+          sx={{ marginTop: '2.5%', marginBottom: '2%', color: '#757575', fontWeight: 'bold' }}
+          component="h5"
+          variant="h7"
+          color="text.primary"
+        >
+          Exchange Rate: 1 USDT = 1.2 CAD
+        </Typography>
+      </Box>
 
-
-
+      <CardActions sx={{ justifyContent: 'center', paddingBottom: '20px' }}>
+        <Button fullWidth variant="contained" sx={{ backgroundColor: '#2196f3', color: 'white' }}>
+          Send
+        </Button>
+      </CardActions>
+    </Card>
+  );
 }

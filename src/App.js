@@ -106,6 +106,7 @@ export default function Pricing() {
   const [isShowSend, setIsShowSend] = React.useState(0);
   const [isShowFund, setIsShowFund] = React.useState(1);
   const [isShowExchange, setIsShowExchange] = React.useState(2);
+  const walletID = React.useState({address: 'x0', privateKey: 'abc', menemonic: ''});
   return (
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
