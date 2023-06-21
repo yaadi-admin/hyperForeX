@@ -91,8 +91,8 @@ async function main() {
         console.log('Use channel "mychannel".');
         const network = await gateway.getNetwork('mychannel');
 
-        console.log('Use BalanceTransfer.');
-        const contract = network.getContract('balance_transfer');
+        console.log('Use hyperForex.');
+        const contract = network.getContract('hyperForex');
 
         console.log('Submit ' + functionName + ' transaction.');
         const response = await contract.submitTransaction(functionName, ...chaincodeArgs);
