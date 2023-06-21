@@ -19,6 +19,7 @@ import Container from '@mui/material/Container';
 import Profile from './User/profileView';
 import Transact from './Transact/transactView';
 import Transactions from './History/historyView';
+import Register from './Register/registerView';
 
 function Copyright(props) {
 
@@ -106,7 +107,18 @@ export default function Pricing() {
   const [isShowSend, setIsShowSend] = React.useState(0);
   const [isShowFund, setIsShowFund] = React.useState(1);
   const [isShowExchange, setIsShowExchange] = React.useState(2);
-  const walletID = React.useState({address: 'x0', privateKey: 'abc', menemonic: ''});
+  const walletID = React.useState({ address: 'x0', privateKey: 'abc', menemonic: '' });
+  const [isRegisterVisible, setRegisterVisible] = React.useState(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
@@ -147,7 +159,7 @@ export default function Pricing() {
               Support
             </Link>
           </nav>
-          <Button href="#" variant="outlined" sx={{ my: 1, mx: 1.5 }}>
+          <Button onClick={() => setIsModalOpen(true)} variant="outlined" sx={{ my: 1, mx: 1.5 }}>
             Connect Wallet
           </Button>
         </Toolbar>
@@ -155,7 +167,8 @@ export default function Pricing() {
 
       <Container maxWidth="md" component="main" sx={{ pt: 8, pb: 6 }}>
         <Grid container spacing={2} alignItems="flex-end">
-          {tiers.map((tier, index) => (
+          {isModalOpen && <Register handleOpenModal={handleOpenModal} handleCloseModal={handleCloseModal} setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />}
+          {!isModalOpen && tiers.map((tier, index) => (
             // Enterprise card is full width at sm breakpoint
             <Grid
               item
@@ -198,6 +211,7 @@ export default function Pricing() {
               </Card>
             </Grid>
           ))}
+          
         </Grid>
       </Container>
       {/* Footer */}
@@ -228,6 +242,7 @@ export default function Pricing() {
             </Grid>
           ))}
         </Grid> */}
+        {/* {Register()} */}
         <Copyright sx={{ mt: 3 }} />
       </Container>
       {/* End footer */}

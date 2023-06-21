@@ -1,3 +1,37 @@
+
+# Currency Transaction App
+This is a React application that allows users to perform currency transactions such as sending funds and currency exchange. It includes the following components:
+
+
+# Transact
+The Transact component serves as the main transaction screen. It displays options for sending funds, funding the balance, and currency exchange. It uses the isVisible prop to determine which component to display based on the user's selection.
+
+To use the Transact component, include it in your application and manage the isVisible prop to control the visibility of the transaction components.
+
+
+import Transact from './components/Transact';
+
+  const [isVisible, setIsVisible] = React.useState(0);
+    <!-- <div>
+      <Transact isVisible={isVisible} setIsVisible={setIsVisible} />
+    </div> -->
+
+# SendTransferComponent
+The SendTransferComponent allows users to send funds. It includes input fields for the recipient's address, amount, and a send button.
+
+To use the SendTransferComponent, include it within the Transact component and handle the isVisible prop accordingly.
+
+# FundComponent
+The FundComponent enables users to fund their balance. It includes input fields for entering the value in ETH and CAD, and an exchange rate display. Users can swap the values by clicking the swap button.
+
+To use the FundComponent, include it within the Transact component and handle the isVisible prop accordingly.
+
+# ExchangeComponent
+The ExchangeComponent allows users to perform currency exchange. It includes input fields for entering the value and selecting the currency for both USDT and CAD. Users can swap the values and currencies by clicking the swap button.
+
+To use the ExchangeComponent, include it within the Transact component and handle the isVisible prop accordingly.
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
