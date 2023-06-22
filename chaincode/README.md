@@ -167,15 +167,8 @@ It will return a JSON string.  Like this:
 
 npm install
 
-./network.sh deployCC -ccn balance_transfer -ccv 1.0 -ccp ~/HyperForex-chaincode -ccl javascript
+./network.sh deployCC -ccn hyperForex -ccv 1.0 -ccp ~/HyperForex-chaincode -ccl javascript
 
-OR
-
-peer lifecycle chaincode package simple_chaincode.tar.gz --path ~/HyperForex-chaincode --lang node --label simple_chaincode_1.0 
-peer lifecycle chaincode install simple_chaincode.tar.gz 
-export PACKAGE_ID=simple_chaincode_1.0:7b484b2c0aa0d333a8ccee88ee4765a9c87979832dbc8034e34175eb83b3ec5b
-peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --channelID mychannel --name simple_chaincode --version 1.0 --package-id $PACKAGE_ID --sequence 1 --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
-peer lifecycle chaincode checkcommitreadiness --channelID mychannel --name simple_chaincode --version 1.0 --sequence 1 --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem --output json
 
 export CORE_PEER_TLS_ENABLED=true
 export CORE_PEER_LOCALMSPID="Org1MSP"
@@ -191,7 +184,7 @@ peer chaincode invoke \
     --ordererTLSHostnameOverride orderer.example.com \
     --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem \
     -C mychannel \
-    -n balance_transfer \
+    -n hyperForex \
     --peerAddresses localhost:7051 \
     --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt \
     --peerAddresses localhost:9051 \
