@@ -1,5 +1,21 @@
 # HyperForex-chaincode
 
+# network
+
+Use the fabric-samples to deploy a test network.
+
+It has two organizations:
+
+* org1: We use org1 as admin. Only users from org1 can access Admin API.
+* org2: Normal users are in the org2.
+
+We provide three users:
+
+* CAAdmin@org1.example.com : Who can access the admin API.
+* Alice@org2.example.com: Normal user.
+* Bob@org2.example.com: Normal user. 
+
+
 # ChainCode API
 
 # 1. Admin API
