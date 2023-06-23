@@ -306,7 +306,7 @@ app.post('/withdrawMoney', async (req, res) => {
         try {
             historyModule.createHistory("withdrawMoney", {
                 userID,
-                widthdrawFrom,
+                withdrawFrom,
                 currency,
                 amount
             })
