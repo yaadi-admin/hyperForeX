@@ -175,6 +175,8 @@ If users don’t have enough balance, it will throw an error.
 
 ### 2.5 history
 
+GET API
+
 get the history of 4 types of actions:
 
 * depositMoney
