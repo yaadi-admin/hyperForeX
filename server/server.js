@@ -11,8 +11,8 @@ const testNetworkRoot = path.resolve(require('os').homedir(), 'fabric-samples/te
 app.use(express.json());
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
-
-
+const cors = require('cors');
+app.use(cors())
 
 async function initGateway() {
     try {
