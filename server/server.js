@@ -105,7 +105,6 @@ app.get('/balance', async (req, res) => {
     try {
         const userID = req.query.userID
         console.log(`get balance, userID: ${userID}`)
-        console.log(req.query)
 
         const contract = contracts[userID]
         if (contract == undefined) {
@@ -119,10 +118,30 @@ app.get('/balance', async (req, res) => {
         res.json({ success: true, data: json});
     } catch (error) {
         console.log(`Error processing transaction. ${error}`);
-        res.status(500).json({ message: `Error processing transaction. ${error}` });
+        res.status(500).json({success: false, message: `Error processing transaction. ${error}` });
     }
 })
 
+app.get('/currencyList', async (req, res) => {
+    try {
+        const userID = "Alice@org2.example.com"
+        console.log(`get currencyList`)
+
+        const contract = contracts[userID]
+        if (contract == undefined) {
+            return res.json({success: false, message: `not support userid ${userID}`})
+        }
+        // submitTransaction
+        const data = await contract.evaluateTransaction("currencyList")
+        const json = JSON.parse(data.toString())
+        console.log(json)
+
+        res.json({ success: true, data: json});
+    } catch (error) {
+        console.log(`Error processing transaction. ${error}`);
+        res.status(500).json({success: false, message: `Error processing transaction. ${error}` });
+    }
+})
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
