@@ -243,7 +243,7 @@ app.post('/submitTrans', async (req, res) => {
         console.log(`identityLabel : ${identityLabel} , functionName: ${functionName} , chaincodeArgs: ${chaincodeArgs}`)
 
         const response = await connectToGateway(identityLabel, functionName, chaincodeArgs);
-        res.json({ response });
+        res.json({ response: response.toString() });
     } catch (error) {
         console.log(`Error processing transaction. ${error}`);
         res.status(500).json({ message: `Error processing transaction. ${error}` });
