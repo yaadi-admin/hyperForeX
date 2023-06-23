@@ -219,7 +219,9 @@ async function connectToGateway(identityLabel, functionName, chaincodeArgs) {
         const contract = network.getContract('hyperForex');
 
         console.log('Submit ' + functionName + ' transaction.');
-        const response = await contract.submitTransaction(functionName, ...chaincodeArgs);
+        // it can't be process ...
+        // const response = await contract.submitTransaction(functionName, ...chaincodeArgs);
+        const response = await contract.submitTransaction(functionName, chaincodeArgs);
         if (`${response}` !== '') {
             console.log(`Response from ${functionName}: ${response}`);
         }
@@ -237,6 +239,7 @@ async function connectToGateway(identityLabel, functionName, chaincodeArgs) {
 app.post('/submitTrans', async (req, res) => {
     try {
         const { identityLabel, functionName, chaincodeArgs } = req.body;
+        console.log(`identityLabel : ${identityLabel} , functionName: ${functionName} , chaincodeArgs: ${chaincodeArgs}`)
 
         const response = await connectToGateway(identityLabel, functionName, chaincodeArgs);
         res.json({ response });
