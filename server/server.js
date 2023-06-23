@@ -145,13 +145,50 @@ app.get('/currencyList', async (req, res) => {
 app.post('/transfer', async (req, res) => {
     try {
         const {userID, transferTo, currency, amount} = req.body
-        console.log(`post transfer ${req.body}`)
+        console.log(`post transfer`)
 
         const contract = contracts[userID]
         if (contract == undefined) {
             return res.json({success: false, message: `not support userid ${userID}`})
         }
         await contract.submitTransaction("transfer", userID, transferTo, currency, amount)
+        res.json({ success: true});
+    } catch (error) {
+        console.log(`Error processing transaction. ${error}`);
+        res.status(500).json({success: false, message: `Error processing transaction. ${error}` });
+    }
+})
+
+app.post('/exchangeCurrency', async (req, res) => {
+    try {
+        const {userID, currencyFrom, currencyTo, amountFrom, amountTo} = req.body
+        console.log(`post exchangeCurrency`)
+
+        const contract = contracts[userID]
+        if (contract == undefined) {
+            return res.json({success: false, message: `not support userid ${userID}`})
+        }
+        const data = await contract.submitTransaction("exchangeCurrency", userID, currencyFrom, currencyTo, amountFrom, amountTo)
+        const json = JSON.parse(data.toString())
+        console.log(json)
+        res.json({ success: true, data: json});
+    } catch (error) {
+        console.log(`Error processing transaction. ${error}`);
+        res.status(500).json({success: false, message: `Error processing transaction. ${error}` });
+    }
+})
+
+// we don't need this API.
+app.post('/initAccount', async (req, res) => {
+    try {
+        const {userID} = req.body
+        console.log(`post initAccount`)
+
+        const contract = contracts[userID]
+        if (contract == undefined) {
+            return res.json({success: false, message: `not support userid ${userID}`})
+        }
+        await contract.submitTransaction("initAccount", userID)
         res.json({ success: true});
     } catch (error) {
         console.log(`Error processing transaction. ${error}`);
