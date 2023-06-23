@@ -9,6 +9,7 @@ const { Wallets, Gateway } = require('fabric-network');
 const FabricCAServices = require('fabric-ca-client');
 const testNetworkRoot = path.resolve(require('os').homedir(), 'fabric-samples/test-network');
 app.use(express.json());
+const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/enrollUser', async (req, res) => {
