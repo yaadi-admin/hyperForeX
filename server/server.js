@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
+const historyModule = require('./history')
 const app = express();
 const port = 8964;
 const { Wallets, Gateway } = require('fabric-network');
@@ -159,6 +160,18 @@ app.post('/transfer', async (req, res) => {
         }
         await contract.submitTransaction("transfer", userID, transferTo, currency, amount)
         res.json({ success: true});
+
+        try {
+            historyModule.createHistory("transfer", {
+                userID,
+                transferTo,
+                currency,
+                amount
+            })
+        } catch (error) {
+            console.log("historyModule.createHistory error:")
+            console.log(error)
+        }
     } catch (error) {
         console.log(`Error processing transaction. ${error}`);
         res.status(500).json({success: false, message: `Error processing transaction. ${error}` });
@@ -178,6 +191,19 @@ app.post('/exchangeCurrency', async (req, res) => {
         const json = JSON.parse(data.toString())
         console.log(json)
         res.json({ success: true, data: json});
+
+        try {
+            historyModule.createHistory("exchangeCurrency", {
+                userID,
+                currencyFrom,
+                currencyTo,
+                amountFrom,
+                amountTo
+            })
+        } catch (error) {
+            console.log("historyModule.createHistory error:")
+            console.log(error)
+        }
     } catch (error) {
         console.log(`Error processing transaction. ${error}`);
         res.status(500).json({success: false, message: `Error processing transaction. ${error}` });
@@ -247,6 +273,18 @@ app.post('/depositMoney', async (req, res) => {
         }
         await contract.submitTransaction("depositMoney", depositTo, currency, amount)
         res.json({ success: true});
+
+        try {
+            historyModule.createHistory("depositMoney", {
+                userID,
+                depositTo,
+                currency,
+                amount
+            })
+        } catch (error) {
+            console.log("historyModule.createHistory error:")
+            console.log(error)
+        }
     } catch (error) {
         console.log(`Error processing transaction. ${error}`);
         res.status(500).json({success: false, message: `Error processing transaction. ${error}` });
@@ -264,12 +302,50 @@ app.post('/withdrawMoney', async (req, res) => {
         }
         await contract.submitTransaction("withdrawMoney", withdrawFrom, currency, amount)
         res.json({ success: true});
+
+        try {
+            historyModule.createHistory("withdrawMoney", {
+                userID,
+                widthdrawFrom,
+                currency,
+                amount
+            })
+        } catch (error) {
+            console.log("historyModule.createHistory error:")
+            console.log(error)
+        }
     } catch (error) {
         console.log(`Error processing transaction. ${error}`);
         res.status(500).json({success: false, message: `Error processing transaction. ${error}` });
     }
 })
 
+
+app.get('/history', async (req, res) => {
+    try {
+        const userID = req.query.userID
+        const type = req.query.type
+        console.log(`get history, userID: ${userID} , type : ${type}`)
+
+        let list
+        if (type == "depositMoney") {
+            list = await historyModule.getDepositHistory(userID)
+        } else if (type == "withdrawMoney") {
+            list = await historyModule.getWithdrawHistory(userID)
+        } else if (type == "transfer") {
+            list = await historyModule.getTransferHistory(userID)
+        } else if (type == "depositMoney") {
+            list = await exchangeCurrency.getExchangeHistory(userID)
+        } else {
+            res.json({success: false, message: "don't support this type of history!!"})
+            return
+        }
+        res.json({ success: true, data: list});
+    } catch (error) {
+        console.log(`get history failed. ${error}`);
+        res.status(500).json({success: false, message: `get history failed. ${error}` });
+    }
+})
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
