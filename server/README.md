@@ -173,6 +173,52 @@ It will return a JSON string.  Like this:
 
 If users don’t have enough balance, it will throw an error.
 
+### 2.5 history
+
+get the history of 4 types of actions:
+
+* depositMoney
+* withdrawMoney
+* transfer
+* exchangeCurrency
+
+Parameters:
+
+* userID: String type.  User ID.
+* type: the type of transactions.
+
+
+Return:
+
+{success, data:[{history}]}
+
+History object is different for each type.
+
+* for depositMoney: 
+    * depositTo
+    * currency
+    * amount
+    * createdAt: time
+* for withdrawMoney: 
+    * withdrawFrom
+    * currency
+    * amount
+    * createdAt: time
+* for transfer: 
+    * userID: Money is transfered from this person.
+    * transferTo: Who received money.
+    * currency
+    * amount
+    * createdAt: time
+* for exchangeCurrency: 
+    * userID
+    * currencyFrom
+    * currencyTo
+    * amountFrom
+    * amountTo
+    * createdAt: time
+
+
 # 3. Public API
 
 There will be some information that every can query without accounts.

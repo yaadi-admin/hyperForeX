@@ -334,7 +334,7 @@ app.get('/history', async (req, res) => {
             list = await historyModule.getWithdrawHistory(userID)
         } else if (type == "transfer") {
             list = await historyModule.getTransferHistory(userID)
-        } else if (type == "depositMoney") {
+        } else if (type == "exchangeCurrency") {
             list = await exchangeCurrency.getExchangeHistory(userID)
         } else {
             res.json({success: false, message: "don't support this type of history!!"})
