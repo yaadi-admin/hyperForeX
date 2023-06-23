@@ -27,7 +27,7 @@ const transactionSchema = new Schema(
     },
 
     // widthdraw
-    widthdrawFrom: {
+    withdrawFrom: {
       type: String,
       required: false,
     },
@@ -93,7 +93,7 @@ mongoose.connect(connectionString, { useNewUrlParser: true }).then(
 
 // historyType: depositMoney, withdrawMoney, transfer,exchangeCurrency
 async function createHistory(historyType, data) {
-  let history = data.userID;
+  let history = {userID: data.userID};
   if (historyType == "depositMoney") {
     history.type = historyType;
     history.depositTo = data.depositTo;
@@ -101,7 +101,7 @@ async function createHistory(historyType, data) {
     history.amount = data.amount;
   } else if (historyType == "withdrawMoney") {
     history.type = historyType;
-    history.widthdrawFrom = data.widthdrawFrom;
+    history.withdrawFrom = data.withdrawFrom;
     history.currency = data.currency;
     history.amount = data.amount;
   } else if (historyType == "transfer") {
@@ -195,7 +195,7 @@ async function getWithdrawHistory(userID) {
   } else {
     const historys = await HistoryModel.find({
       type: "withdrawMoney",
-      widthdrawFrom: userID,
+      withdrawFrom: userID,
     })
       .sort({ createAt: -1 })
       .exec();
