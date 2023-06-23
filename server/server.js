@@ -105,6 +105,7 @@ app.get('/balance', async (req, res) => {
     try {
         const userID = req.params.userID
         console.log(`get balance, userID: ${userID}`)
+        console.log(req.params)
 
         const contract = contracts[userID]
         if (contract == undefined) {
