@@ -196,6 +196,75 @@ app.post('/initAccount', async (req, res) => {
     }
 })
 
+app.post('/addCurrency', async (req, res) => {
+    try {
+        const {userID, currency, exchangeRateToUSD} = req.body
+        console.log(`post addCurrency`)
+
+        const contract = contracts[userID]
+        if (contract == undefined) {
+            return res.json({success: false, message: `not support userid ${userID}`})
+        }
+        await contract.submitTransaction("addCurrency", currency, exchangeRateToUSD)
+        res.json({ success: true});
+    } catch (error) {
+        console.log(`Error processing transaction. ${error}`);
+        res.status(500).json({success: false, message: `Error processing transaction. ${error}` });
+    }
+})
+
+app.post('/updateRate', async (req, res) => {
+    try {
+        const {userID, currency, exchangeRateToUSD} = req.body
+        console.log(`post updateRate`)
+
+        const contract = contracts[userID]
+        if (contract == undefined) {
+            return res.json({success: false, message: `not support userid ${userID}`})
+        }
+        await contract.submitTransaction("updateRate", currency, exchangeRateToUSD)
+        res.json({ success: true});
+    } catch (error) {
+        console.log(`Error processing transaction. ${error}`);
+        res.status(500).json({success: false, message: `Error processing transaction. ${error}` });
+    }
+})
+
+app.post('/depositMoney', async (req, res) => {
+    try {
+        const {userID, depositTo, currency, amount} = req.body
+        console.log(`post depositMoney`)
+
+        const contract = contracts[userID]
+        if (contract == undefined) {
+            return res.json({success: false, message: `not support userid ${userID}`})
+        }
+        await contract.submitTransaction("depositMoney", depositTo, currency, amount)
+        res.json({ success: true});
+    } catch (error) {
+        console.log(`Error processing transaction. ${error}`);
+        res.status(500).json({success: false, message: `Error processing transaction. ${error}` });
+    }
+})
+
+app.post('/withdrawMoney', async (req, res) => {
+    try {
+        const {userID, withdrawFrom, currency, amount} = req.body
+        console.log(`post withdrawMoney`)
+
+        const contract = contracts[userID]
+        if (contract == undefined) {
+            return res.json({success: false, message: `not support userid ${userID}`})
+        }
+        await contract.submitTransaction("withdrawMoney", withdrawFrom, currency, amount)
+        res.json({ success: true});
+    } catch (error) {
+        console.log(`Error processing transaction. ${error}`);
+        res.status(500).json({success: false, message: `Error processing transaction. ${error}` });
+    }
+})
+
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
