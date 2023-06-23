@@ -94,7 +94,11 @@ async function initGateway() {
     }
 }
 
-const contracts = await initGateway()
+let contracts
+(async () => {
+    contracts = await initGateway()
+})()
+
 
 
 app.get('/balance', async (req, res) => {
