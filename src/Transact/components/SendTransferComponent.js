@@ -8,10 +8,12 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import { TextField } from '@mui/material';
 
-export default function SendTransferComponent({ isVisible, setIsVisible }) {
+export default function SendTransferComponent({ isVisible, setIsVisible, wallet }) {
   const [showValue, setShowValue] = React.useState(false);
   const [email, setEmail] = React.useState('');
-  const [selectedUser, setSelectedUser] = React.useState({});
+  const [value, setValue] = React.useState('');
+  const [selectedCurrency, setSelectedCurrency] = React.useState('');
+  const [currencies, setCurrencyList] = React.useState([]);
 
   const handleBackClick = () => {
     setShowValue(false);
@@ -30,11 +32,51 @@ export default function SendTransferComponent({ isVisible, setIsVisible }) {
     // Handle send logic
   };
 
+  React.useEffect(() => {
+    getExchangeRate();
+  }, []);
+
+  const getExchangeRate = async () => {
+    fetch("http://3.89.88.181:8964/currencyList")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.data);
+        setCurrencyList(data?.data)
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
+      // .then((json) => {
+      //   // console.log(json)
+        
+      // });
+  };
+
+  const transfer = () => {
+    console.log(wallet?.email);
+    fetch('http://3.89.88.181:8964/transfer', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userID: wallet?.email,
+        transferTo: email,
+        currency: selectedCurrency,
+        amount: value.toString(),
+      }),
+    })
+      .then((response) => {
+        console.log(response)
+      setIsVisible(0);
+      })
+  };
+
   return (
     <Card sx={{ maxWidth: 500, marginBottom: 2 }}>
       <CardHeader
-        title={showValue ? 'Send Transfer' : 'Select Recipient'}
-        subheader={showValue ? 'Enter Amount and Exchange Rate' : ''}
+        title={showValue ? 'Enter Amount' : 'Select Recipient'}
+        subheader={showValue ? `Sending to ${email}` : ''}
       />
       <CardContent>
         {showValue ? (
@@ -48,7 +90,16 @@ export default function SendTransferComponent({ isVisible, setIsVisible }) {
           >
             <TextField
               id="standard-basic"
+              label="Currency"
+              value={selectedCurrency}
+              onChange={(e) => setSelectedCurrency(e.target.value)}
+              variant="standard"
+            />
+            <TextField
+              id="standard-basic"
               label="Value"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
               variant="standard"
             />
             <Typography
@@ -57,7 +108,7 @@ export default function SendTransferComponent({ isVisible, setIsVisible }) {
               variant="h7"
               color="text.primary"
             >
-              Exchange Rate
+              Exchange Rate {currencies[1]?.exchangeRateToUSD}
             </Typography>
           </Box>
         ) : (
@@ -74,19 +125,6 @@ export default function SendTransferComponent({ isVisible, setIsVisible }) {
               label="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              variant="standard"
-            />
-            <Typography
-              style={{ marginTop: '10%' }}
-              component="h5"
-              variant="h7"
-              color="text.primary"
-            >
-              OR
-            </Typography>
-            <TextField
-              id="standard-basic"
-              label="Entity Identification Number"
               variant="standard"
             />
           </Box>
@@ -107,7 +145,7 @@ export default function SendTransferComponent({ isVisible, setIsVisible }) {
       </CardActions>
       {showValue && (
         <CardActions>
-          <Button onClick={handleSendClick} fullWidth variant="outlined">
+          <Button onClick={transfer} fullWidth variant="outlined">
             Send
           </Button>
         </CardActions>

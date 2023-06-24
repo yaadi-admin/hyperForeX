@@ -16,12 +16,14 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 
-export default function Profile() {
+export default function Profile(wallet) {
   const [editing, setEditing] = React.useState(false);
-  const [email, setEmail] = React.useState('example@example.com');
-  const [address, setAddress] = React.useState('Canada'); // Dummy web3 address
-  const [webAddress, setWebAddress] = React.useState('0xABCDE'); // Dummy web3 address
+  const [email, setEmail] = React.useState(wallet?.wallet?.email);
+  const [address, setAddress] = React.useState(wallet?.wallet?.address); // Dummy web3 address
+  const [webAddress, setWebAddress] = React.useState(''); // Dummy web3 address
 
+  const balances = [{label: wallet?.wallet[0]}, {label: wallet?.wallet[1] }, {label: wallet?.wallet[2]}];
+  console.log(balances);
   const renderFundBalance = () => {
     return (
       <Box
@@ -64,11 +66,8 @@ export default function Profile() {
           mb: 2,
         }}
       >
-        <Typography component="h2" variant="h6" color="text.primary">
-          ID#
-        </Typography>
-        <Typography component="h2" variant="h6" color="text.primary">
-                  {webAddress}
+        <Typography component="h5" variant="h7" color="text.primary">
+         ID: {wallet?.wallet?.email}
         </Typography>
       </Box>
 
@@ -90,20 +89,27 @@ export default function Profile() {
             marginBottom: '10px',
           }}
         >
+          <img src={wallet?.wallet?.defaultImage} style={{width: '100%',height: '100%'}} />
           {/* Placeholder for profile image */}
         </div>
+        
         {!editing ? (
           <>
+            {(balances)?.map((balance) => (
+              <Typography key={balance.currency} variant="body1" color="text.primary" gutterBottom>
+                {balance?.label?.currency}: {balance?.label?.balance}
+              </Typography>
+            ))}
             <Typography
               variant="body1"
               color="text.primary"
               gutterBottom
               sx={{ marginTop: 5 }}
             >
-              {email}
+              {wallet?.wallet?.email}
             </Typography>
             <Typography variant="body1" color="text.primary" gutterBottom>
-              {address}
+              {wallet?.wallet?.address}
             </Typography>
           </>
         ) : (

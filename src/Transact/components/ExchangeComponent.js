@@ -1,37 +1,80 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
-import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
-import StarIcon from '@mui/icons-material/StarBorder';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import GlobalStyles from '@mui/material/GlobalStyles';
-import Container from '@mui/material/Container';
-import { TextField, MenuItem, Select } from '@mui/material';
+import React, { useEffect } from 'react';
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Select,
+  TextField,
+  MenuItem,
+  Typography,
+} from '@mui/material';
 
-const currencies = [
-  { label: 'USDT', value: 'USDT' },
-  { label: 'CAD', value: 'CAD' },
-];
+export default function ExchangeComponent({ isVisible, setIsVisible, wallet }) {
+  const currencies = [
+    { label: 'USD', value: 'USD', exchangeRateToUSD: 1 },
+    { label: 'CAD', value: 'CAD', exchangeRateToUSD: 0.8 },
+    // Add more currencies with their respective exchange rates
+  ];
 
-export default function ExchangeComponent({ isVisible, setIsVisible }) {
   const [usdtValue, setUsdtValue] = React.useState('');
-  const [usdtCurrency, setUsdtCurrency] = React.useState('USDT');
+  const [usdtCurrency, setUsdtCurrency] = React.useState(currencies[0].value);
   const [cadValue, setCadValue] = React.useState('');
-  const [cadCurrency, setCadCurrency] = React.useState('CAD');
+  const [cadCurrency, setCadCurrency] = React.useState(currencies[1].value);
+  const [rate, setRate] = React.useState('');
 
   const handleSwap = () => {
-    setUsdtValue(cadValue);
-    setCadValue(usdtValue);
-    setUsdtCurrency(cadCurrency);
-    setCadCurrency(usdtCurrency);
+    if (usdtCurrency !== cadCurrency) {
+      setUsdtValue(cadValue);
+      setUsdtCurrency(cadCurrency);
+      setCadCurrency(usdtCurrency);
+    }
+  };
+
+  useEffect(() => {
+    getExchangeRate();
+  }, []);
+
+  useEffect(() => {
+    if (usdtCurrency !== cadCurrency && usdtValue !== '') {
+      const exchangeRate = currencies.find((currency) => currency.value === cadCurrency).exchangeRateToUSD;
+      const convertedCadValue = parseFloat(usdtValue) / exchangeRate;
+      setCadValue(convertedCadValue.toFixed(2));
+    }
+  }, [usdtValue, usdtCurrency, cadCurrency]);
+
+  const getExchangeRate = async () => {
+    fetch("http://3.89.88.181:8964/currencyList")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.data);
+        setRate(data.data[1].exchangeRateToUSD);
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
+  };
+
+  const exchangeCurrency = () => {
+    console.log(wallet?.email);
+    fetch('http://3.89.88.181:8964/depositMoney', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userID: wallet?.email,
+        currencyFrom: usdtCurrency,
+        currencyTo: cadCurrency,
+        amountFrom: usdtValue.toString(),
+        amountTo: cadValue.toString(),
+      }),
+    })
+      .then((response) => {
+        console.log(response)
+        setIsVisible(0);
+      })
   };
 
   return (
@@ -60,6 +103,7 @@ export default function ExchangeComponent({ isVisible, setIsVisible }) {
           <Select
             value={usdtCurrency}
             onChange={(e) => setUsdtCurrency(e.target.value)}
+            disabled
           >
             {currencies.map((currency) => (
               <MenuItem key={currency.value} value={currency.value}>
@@ -69,7 +113,7 @@ export default function ExchangeComponent({ isVisible, setIsVisible }) {
           </Select>
         </Box>
         <Button sx={{ alignSelf: 'center', my: 1 }} onClick={handleSwap}>
-          <SwapHorizIcon />
+          Swap
         </Button>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
           <TextField
@@ -82,6 +126,7 @@ export default function ExchangeComponent({ isVisible, setIsVisible }) {
           <Select
             value={cadCurrency}
             onChange={(e) => setCadCurrency(e.target.value)}
+            disabled
           >
             {currencies.map((currency) => (
               <MenuItem key={currency.value} value={currency.value}>
@@ -96,12 +141,12 @@ export default function ExchangeComponent({ isVisible, setIsVisible }) {
           variant="h7"
           color="text.primary"
         >
-          Exchange Rate: 1 USDT = 1.2 CAD
+          Exchange Rate: {rate}
         </Typography>
       </Box>
 
       <CardActions sx={{ justifyContent: 'center', paddingBottom: '20px' }}>
-        <Button fullWidth variant="contained" sx={{ backgroundColor: '#2196f3', color: 'white' }}>
+        <Button onClick={exchangeCurrency} fullWidth variant="contained" sx={{ backgroundColor: '#2196f3', color: 'white' }}>
           Send
         </Button>
       </CardActions>

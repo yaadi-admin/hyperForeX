@@ -9,7 +9,7 @@ import SendTransferComponent from './components/SendTransferComponent';
 import FundComponent from './components/FundComponent';
 import ExchangeComponent from './components/ExchangeComponent';
 
-export default function Transact({ isVisible, setIsVisible }) {
+export default function Transact({ isVisible, setIsVisible, wallet }) {
   if (isVisible === 0) {
     return (
       <Card sx={{ maxWidth: 500, marginBottom: 2 }}>
@@ -74,14 +74,14 @@ export default function Transact({ isVisible, setIsVisible }) {
   }
 
   if (isVisible === 1) {
-    return <SendTransferComponent isVisible={isVisible} setIsVisible={setIsVisible} />;
+    return <SendTransferComponent wallet={wallet} isVisible={isVisible} setIsVisible={setIsVisible} />;
   }
 
   if (isVisible === 2) {
-    return <FundComponent isVisible={isVisible} setIsVisible={setIsVisible} />;
+    return <FundComponent wallet={wallet} isVisible={isVisible} setIsVisible={setIsVisible} />;
   }
 
   if (isVisible === 3) {
-    return <ExchangeComponent isVisible={isVisible} setIsVisible={setIsVisible} />;
+    return <ExchangeComponent wallet={wallet} isVisible={isVisible} setIsVisible={setIsVisible} />;
   }
 }

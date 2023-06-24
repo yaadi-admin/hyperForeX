@@ -7,29 +7,39 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 
-export default function Transactions() {
-  const transactionHistory = [
-    {
-      transactionID: '01',
-      timestamp: '',
-      sender: '',
-      recipient: '',
-      amount: '',
-      currency: '',
-      transactionType: '',
-      status: '',
-    },
-    // {
-    //   transactionID: '02',
-    //   timestamp: '',
-    //   sender: '',
-    //   recipient: '',
-    //   amount: '',
-    //   currency: '',
-    //   transactionType: '',
-    //   status: '',
-    // },
-  ];
+export default function Transactions(wallet) {
+  // const transactionHistory = [
+  //   {
+  //     transactionID: '01',
+  //     timestamp: '',
+  //     sender: '',
+  //     recipient: '',
+  //     amount: '',
+  //     currency: '',
+  //     transactionType: '',
+  //     status: '',
+  //   },
+  //   // {
+  //   //   transactionID: '02',
+  //   //   timestamp: '',
+  //   //   sender: '',
+  //   //   recipient: '',
+  //   //   amount: '',
+  //   //   currency: '',
+  //   //   transactionType: '',
+  //   //   status: '',
+  //   // },
+  // ];
+  const [transactionHistory, setTransactionHistory] = React.useState([{
+    transactionID: '01',
+    timestamp: '',
+    sender: '',
+    recipient: '',
+    amount: '',
+    currency: '',
+    transactionType: '',
+    status: '',
+  }]);
 
   const [hoveredTransaction, setHoveredTransaction] = React.useState(null);
 
@@ -39,6 +49,19 @@ export default function Transactions() {
 
   const handleMouseLeave = () => {
     setHoveredTransaction(null);
+  };
+
+  React.useEffect(() => {
+    getHistory();
+  }, []);
+
+  const getHistory = async () => {
+    fetch(`http://3.89.88.181:8964/userID=CAAdmin@org1.example`)
+      .then((response) => console.log(response))
+      .then((data) => {
+        console.log(data);
+        // setTransactionHistory(data);
+      })
   };
 
   return (
