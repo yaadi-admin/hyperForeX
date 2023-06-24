@@ -1,5 +1,6 @@
 Project Description
-• Hyper ForeX
+
+Hyper ForeX
 • The Cross-Border Payment Platform is a blockchain-based solution developed using 
 Hyperledger Fabric technology. It aims to address the challenges and inefficiencies 
 associated with cross-border payments, such as high transaction costs, long settlement 
@@ -46,5 +47,6 @@ Architecture Diagram
 
 Data Flow Diagram
 
+![image](https://github.com/yaadi-admin/hyperForeX/assets/123502241/53c243cf-0b39-4b75-be03-6a25292480ea)
 
 Snapshots of application
