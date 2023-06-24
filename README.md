@@ -44,9 +44,21 @@ Diagrams
 
 Architecture Diagram
 
+![image](https://github.com/yaadi-admin/hyperForeX/assets/123502241/254fa3c1-7a53-4316-90e4-5f8836e007c6)
 
 Data Flow Diagram
 
 ![image](https://github.com/yaadi-admin/hyperForeX/assets/123502241/53c243cf-0b39-4b75-be03-6a25292480ea)
 
 Snapshots of application
+
+![image](https://github.com/yaadi-admin/hyperForeX/assets/123502241/65ac57ef-58b4-45aa-a0da-6d8b47cf86d4)
+
+![image](https://github.com/yaadi-admin/hyperForeX/assets/123502241/e1dddfe3-ad61-42d5-8e0b-786923f0ea0b)
+
+![image](https://github.com/yaadi-admin/hyperForeX/assets/123502241/34ab1606-f40d-4fa1-9e67-ef72f4c6aef8)
+
+
+
+
+
